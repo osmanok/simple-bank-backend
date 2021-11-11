@@ -1,6 +1,5 @@
 package db
 
-/*
 import (
 	"context"
 	"database/sql"
@@ -91,7 +90,10 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 			return err
 		}
 
+		// TODO: add a transaction to update accounts balance
+
 		return nil
 	})
+
+	return result, err
 }
-*/
