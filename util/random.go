@@ -46,3 +46,8 @@ func RandomCurrency() string {
 	n := len(currencies)
 	return currencies[rand.Intn(n)]
 }
+
+// RandomAmount generates a random amount.
+func RandomAmount() int64 {
+	return RandomInt(0, 100)
+}
