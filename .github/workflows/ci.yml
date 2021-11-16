@@ -11,13 +11,39 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: osmanokuyan
+          POSTGRES_PASSWORD: Gok898
+          POSTGRES_DB: simplebank
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.17
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
+        sudo mv migrate.linux-amd64 /usr/bin
+        which migrate
+
+    - name: Run migrations
+      run: |
+        migrate -path db/migration -database "postgresql://osmanokuyan:Gok898@localhost:5432/simplebank?sslmode=disable" -verbose up
+
 
     - name: Test
       run: go test -v -cover ./...
